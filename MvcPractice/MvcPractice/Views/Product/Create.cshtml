@@ -1,0 +1,19 @@
+﻿@model MvcPractice.Models.Product
+
+<h1>Add Product</h1>
+
+<form asp-action="Create" method="post">
+    <label>Name:</label>
+    <input type="text" asp-for="Name" />
+    <span asp-validation-for="Name" style="color:red"></span>
+
+    <br />
+
+    <label>Price:</label>
+    <input type="number" asp-for="Price" />
+    <span asp-validation-for="Price" style="color:red"></span>
+
+    <br />
+
+    <button type="submit">Save</button>
+</form>

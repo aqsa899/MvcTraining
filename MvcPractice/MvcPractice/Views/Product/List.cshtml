@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Product List";
+}
+    <h1>@ViewData["Title"]</h1>
+
+    <ul>
+        @for (int i = 1; i <= 5; i++)
+        {
+            <li>Product @i</li>
+        }
+    </ul>
+@model Product
+
+<h1>Product List</h1>
+
+<ul>
+    @{//foreach (var product in Model)
+    //{
+        <li>@Model.Name</li>
+        <li>@Model.Price</li>
+    }
+</ul>
