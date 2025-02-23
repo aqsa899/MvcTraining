@@ -7,7 +7,7 @@ namespace MvcPractice.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Product name is required")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Range(1, 10000, ErrorMessage = "Price must be between 1 and 10,000")]
         public decimal Price { get; set; }
