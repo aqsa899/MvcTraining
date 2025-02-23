@@ -6,54 +6,50 @@ namespace MvcPractice.Controllers
    // [Route("shop")]
     public class ProductController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IProductService _productService;
 
-        public ProductController(AppDbContext context)
+        public ProductController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
-        // READ: Show all products
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _context.Products.ToList();
+            var products = await _productService.GetAllProductsAsync();
             return View(products);
         }
 
-        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Products.Add(product);
-                _context.SaveChanges();
+                await _productService.AddProductAsync(product);
                 return RedirectToAction("Index");
             }
             return View(product);
-        }
+        }      
 
         // UPDATE: Show edit form
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = await _productService.FindProductAsync(id);
             if (product == null) return NotFound();
             return View(product);
         }
 
         // UPDATE: Save changes
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public async Task<IActionResult> Edit(Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Products.Update(product);
-                _context.SaveChanges();
+                await _productService.EditProductAsync(product);
                 return RedirectToAction("Index");
             }
             return View(product);
@@ -66,7 +62,7 @@ namespace MvcPractice.Controllers
             if (id == null)
                 return NotFound();
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.FindProductAsync(id);
             if (product == null)
                 return NotFound();
 
@@ -76,14 +72,17 @@ namespace MvcPractice.Controllers
         // 🔹 POST: Confirm Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var product = await _context.Products.FindAsync(id);
+            if (id == null)
+                return NotFound();
+
+            var product = await _productService.FindProductAsync(id);
             if (product == null)
                 return NotFound();
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            await _productService.DeleteProductAsync(product);
+
 
             return RedirectToAction(nameof(Index)); // Redirect to the list after delete
         }
