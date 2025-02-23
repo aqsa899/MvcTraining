@@ -13,6 +13,7 @@ namespace MvcPractice.Controllers
             _productService = productService;
         }
 
+        [ServiceFilter(typeof(LoggingActionFilter))]
         public async Task<IActionResult> Index()
         {
             var products = await _productService.GetAllProductsAsync();
