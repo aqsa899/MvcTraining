@@ -1,0 +1,29 @@
+﻿<form id="userForm">
+    <label>Name:</label>
+    <input type="text" id="name" />
+    <br />
+    <label>Age:</label>
+    <input type="number" id="age" />
+    <br />
+    <button type="submit">Submit</button>
+</form>
+
+<p id="result"></p>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#userForm").submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: "/User/Submit",
+                    type: "POST",
+                    data: { Name: $("#name").val(), Age: $("#age").val() },
+                    success: function (response) {
+                        $("#result").text(response);
+                    }
+                });
+            });
+        });
+    </script>
+}

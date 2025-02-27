@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Employee List";
+}
+
+<h2>Employee List</h2>
+<button id="loadEmployees">Load Employees</button>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Position</th>
+        </tr>
+    </thead>
+    <tbody id="employeeTable">
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#loadEmployees").click(function () {
+                $.ajax({
+                    url: "/Employee/GetEmployees",
+                    type: "GET",
+                    success: function (data) {
+                        var tableBody = $("#employeeTable");
+                        tableBody.empty(); // Clear old data
+                        $.each(data, function (index, employee) {
+                            tableBody.append("<tr><td>" + employee.id + "</td><td>" + employee.name + "</td><td>" + employee.position + "</td></tr>");
+                        });
+                    },
+                    error: function () {
+                        alert("Error loading data.");
+                    }
+                });
+            });
+        });
+    </script>
+}
